@@ -7,6 +7,10 @@ In the extension's preferences, different behaviors can be specified: unhiding o
 
 ![clip](./preview.gif)
 
+About This Fork
+---------------
+- State Why?
+
 Installation from extensions.gnome.org
 --------------------------------------
 
