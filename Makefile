@@ -1,4 +1,4 @@
-SHELL := /bin/bash
+SHELL := /nix/store/x88ivkf7rmrhd5x3cvyv5vh3zqqdnhsk-bash-interactive-5.2-p15/bin/bash
 
 JS_FILES = $(shell echo {extension,convenience,intellihide,panelVisibilityManager,prefs,desktopIconsIntegration}.js)
 UI_FILES = $(shell echo {Settings-40,Settings}.ui)

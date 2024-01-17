@@ -17,27 +17,40 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const GLib = imports.gi.GLib;
-const Meta = imports.gi.Meta;
-const Shell = imports.gi.Shell;
-const Clutter = imports.gi.Clutter;
+import GLib from "gi://GLib";
+import Meta from "gi://Meta";
+import Shell from "gi://Shell";
+import Clutter from "gi://Clutter";
 
-const Main = imports.ui.main;
-const Layout = imports.ui.layout;
-const PointerWatcher = imports.ui.pointerWatcher;
+//const GLib = imports.gi.GLib;
+//const Meta = imports.gi.Meta;
+//const Shell = imports.gi.Shell;
+//const Clutter = imports.gi.Clutter;
 
-const Me = imports.misc.extensionUtils.getCurrentExtension();
-const Convenience = Me.imports.convenience;
-const Intellihide = Me.imports.intellihide;
-const DesktopIconsIntegration = Me.imports.desktopIconsIntegration;
-const DEBUG = Convenience.DEBUG;
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import * as Layout from 'resource:///org/gnome/shell/ui/layout.js';
+import * as PointerWatcher from 'resource:///org/gnome/shell/ui/pointerWatcher.js';
+//const Main = imports.ui.main;
+//const Layout = imports.ui.layout;
+//const PointerWatcher = imports.ui.pointerWatcher;
 
-const MessageTray = Main.messageTray;
-const PanelBox = Main.layoutManager.panelBox;
-const ShellActionMode = (Shell.ActionMode)?Shell.ActionMode:Shell.KeyBindingMode;
+//import ExtensionUtils from "resource:///org/gnome/shell/misc/extensionUtils.js";
+//const Me = imports.misc.extensionUtils.getCurrentExtension();
+//const Me = ExtensionUtils.getCurrentExtension();
+//const Convenience = Me.imports.convenience;
+//const Intellihide = Me.imports.intellihide;
+//const DesktopIconsIntegration = Me.imports.desktopIconsIntegration;
+import { Intellihide } from "./intellihide.js";
+import { DEBUG } from "./convenience.js";
+import { DesktopIconsUsableAreaClass } from "./desktopIconsIntegration.js";
+import { GlobalSignalsHandler } from "./convenience.js";
+
+export const MessageTray = Main.messageTray;
+export const PanelBox = Main.layoutManager.panelBox;
+export const ShellActionMode = (Shell.ActionMode)?Shell.ActionMode:Shell.KeyBindingMode;
 const _searchEntryBin = Main.overview._overview._controls._searchEntryBin;
 
-var PanelVisibilityManager = class HideTopBar_PanelVisibilityManager {
+export var PanelVisibilityManager = class HideTopBar_PanelVisibilityManager {
 
     constructor(settings, monitorIndex) {
         this._monitorIndex = monitorIndex;
@@ -50,7 +63,7 @@ var PanelVisibilityManager = class HideTopBar_PanelVisibilityManager {
         this._animationActive = false;
         this._shortcutTimeout = null;
 
-        this._desktopIconsUsableArea = new DesktopIconsIntegration.DesktopIconsUsableAreaClass(null);
+        this._desktopIconsUsableArea = new DesktopIconsUsableAreaClass(null);
         Main.layoutManager.removeChrome(PanelBox);
         Main.layoutManager.addChrome(PanelBox, {
             affectsStruts: false,
@@ -73,7 +86,7 @@ var PanelVisibilityManager = class HideTopBar_PanelVisibilityManager {
         this._bindSettingsChanges();
         this._updateSettingsMouseSensitive();
         this._updateSettingsShowInOverview();
-        this._intellihide = new Intellihide.Intellihide(this._settings, this._monitorIndex);
+        this._intellihide = new Intellihide(this._settings, this._monitorIndex);
 
         this._updateHotCorner(false);
         this._updateStaticBox();
@@ -391,7 +404,7 @@ var PanelVisibilityManager = class HideTopBar_PanelVisibilityManager {
     }
 
     _bindUIChanges() {
-        this._signalsHandler = new Convenience.GlobalSignalsHandler();
+        this._signalsHandler = new GlobalSignalsHandler();
         this._signalsHandler.add(
             [
                 Main.overview,
@@ -470,7 +483,7 @@ var PanelVisibilityManager = class HideTopBar_PanelVisibilityManager {
     }
 
     _bindSettingsChanges() {
-        this._signalsHandler = new Convenience.GlobalSignalsHandler();
+        this._signalsHandler = new GlobalSignalsHandler();
         this._signalsHandler.addWithLabel("settings",
             [
                 this._settings,

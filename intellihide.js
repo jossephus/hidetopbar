@@ -22,15 +22,23 @@
 // modifications. Dash to Dock is distributed under the terms of the GNU
 // General Public License, version 2 or later.
 
-const GLib = imports.gi.GLib;
-const Meta = imports.gi.Meta;
-const Shell = imports.gi.Shell;
+import GLib from 'gi://GLib';
+import Meta from 'gi://Meta';
+import Shell from 'gi://Shell';
+//const GLib = imports.gi.GLib;
+//const Meta = imports.gi.Meta;
+//const Shell = imports.gi.Shell;
 
-const Main = imports.ui.main;
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+//import * as Signals from 'resource:///org/gnome/shell/signals.js';
+//const Main = imports.ui.main;
 const Signals = imports.signals;
 
-const Me = imports.misc.extensionUtils.getCurrentExtension();
-const Convenience = Me.imports.convenience;
+//import * as ExtensionUtils from 'resource:///org/gnome/shell/misc/extensionUtils.js';
+//const Me = ExtensionUtils.getCurrentExtension();
+//const Convenience = Me.imports.convenience;
+//import Convenience from "./convenience.js";
+import { getMonitorManager, GlobalSignalsHandler } from "./convenience.js";
 
 // A good compromise between reactivity and efficiency; to be tuned.
 const INTELLIHIDE_CHECK_INTERVAL = 100;
@@ -65,14 +73,14 @@ const handledWindowTypes = [
  * Intallihide object: emit 'status-changed' signal when the overlap of windows
  * with the provided targetBoxClutter.ActorBox changes;
  */
-var Intellihide = class HideTopBar_Intellihide {
+export var Intellihide = class HideTopBar_Intellihide {
 
     constructor(settings, monitorIndex) {
         // Load settings
         this._settings = settings;
         this._monitorIndex = monitorIndex;
 
-        this._signalsHandler = new Convenience.GlobalSignalsHandler();
+        this._signalsHandler = new GlobalSignalsHandler();
         this._tracker = Shell.WindowTracker.get_default();
         this._focusApp = null; // The application whose window is focused.
         this._topApp = null; // The application whose window is on top on the monitor with the dock.
@@ -115,7 +123,7 @@ var Intellihide = class HideTopBar_Intellihide {
             this._checkOverlap.bind(this)
         ], [
             // updates when monitor changes, for instance in multimonitor, when monitors are attached
-            Convenience.getMonitorManager(),
+            getMonitorManager(),
             'monitors-changed',
             this._checkOverlap.bind(this)
         ]);

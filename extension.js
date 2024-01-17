@@ -17,32 +17,51 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const Main = imports.ui.main;
+//const Main = imports.ui.main;
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
-const ExtensionUtils = imports.misc.extensionUtils;
-
-const Me = ExtensionUtils.getCurrentExtension();
-const PanelVisibilityManager = Me.imports.panelVisibilityManager;
-const DEBUG = Me.imports.convenience.DEBUG;
+import { PanelVisibilityManager } from "./panelVisibilityManager.js";
+import { DEBUG } from "./convenience.js";
 
 let mSettings = null;
 let mPVManager = null;
 let monitorIndex = null;
 
-function init() { }
 
-function enable() {
-    DEBUG("enable()");
-    mSettings = ExtensionUtils.getSettings();
-    monitorIndex = Main.layoutManager.primaryIndex;
-    mPVManager = new PanelVisibilityManager.PanelVisibilityManager(mSettings, monitorIndex);
+import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
+
+export default class ExampleExtension extends Extension {
+    constructor(metadata) {
+        super(metadata);
+        // DO NOT create objects, connect signals or add main loop sources here
+    }
+
+    enable() {
+        // Create objects, connect signals, create main loop sources, etc.
+        DEBUG("enable()");
+        this._settings = this.getSettings();
+        monitorIndex = Main.layoutManager.primaryIndex;
+        mPVManager = new PanelVisibilityManager(mSettings, monitorIndex);
+    }
+
+    disable() {
+        // Destroy objects, disconnect signals, remove main loop sources, etc.
+        DEBUG("disable()");
+        mPVManager.destroy();
+        this._settings = null;
+
+        mPVManager = null;
+    }
 }
 
-function disable() {
-    DEBUG("disable()");
-    mPVManager.destroy();
-    mSettings.run_dispose();
+//function init() { }
 
-    mPVManager = null;
-    mSettings = null;
-}
+//function enable() {
+    //DEBUG("enable()");
+    //mSettings = Extension.getSettings();
+    //monitorIndex = Main.layoutManager.primaryIndex;
+    //mPVManager = new PanelVisibilityManager(mSettings, monitorIndex);
+//}
+
+//function disable() {
+//}

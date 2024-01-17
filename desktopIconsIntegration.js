@@ -55,15 +55,14 @@
  *
  *******************************************************************************/
 
-const GLib = imports.gi.GLib;
-const Main = imports.ui.main;
-
-const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
+import GLib from "gi://GLib";
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import * as ExtensionUtils from 'resource:///org/gnome/shell/misc/util.js';
+//import {Extension as ExtensionUtils, gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 
 const IDENTIFIER_UUID = "130cbc66-235c-4bd6-8571-98d2d8bba5e2";
 
-var DesktopIconsUsableAreaClass = class {
+export var DesktopIconsUsableAreaClass = class {
     constructor() {
         this._extensionManager = Main.extensionManager;
         this._timedMarginsID = 0;
